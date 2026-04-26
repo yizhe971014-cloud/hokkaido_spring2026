@@ -1,0 +1,1068 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>北海道 2026 春之旅</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;600;700&family=Playfair+Display:ital,wght@0,700;1,500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --pink:       #e8899a;
+  --pink-light: #faeaed;
+  --pink-pale:  #fdf5f7;
+  --green:      #4a7c59;
+  --green-lt:   #dff0e4;
+  --sky:        #4e8fac;
+  --sky-lt:     #ddf0f8;
+  --brown:      #5a3e2b;
+  --brown-md:   #7a5840;
+  --cream:      #fdfaf6;
+  --text:       #2c1f16;
+  --text-mid:   #6b4f38;
+  --text-soft:  #9a8070;
+  --divider:    #ecddd5;
+  --gold:       #b8873a;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Noto Serif TC', serif;
+  background: var(--cream);
+  color: var(--text);
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+/* PETALS */
+@keyframes drift {
+  0%   { transform: translateY(-30px) rotate(0deg); opacity:0; }
+  10%  { opacity:.55; }
+  90%  { opacity:.35; }
+  100% { transform: translateY(105vh) translateX(30px) rotate(220deg); opacity:0; }
+}
+.petal {
+  position:fixed; pointer-events:none; z-index:0;
+  width:10px; height:10px;
+  background: radial-gradient(circle at 40% 35%, #f5c0cc, #e8899a);
+  border-radius: 80% 20% 80% 20% / 20% 80% 20% 80%;
+  animation: drift linear infinite;
+}
+.petal:nth-child(1){left:4%;  animation-duration:13s; animation-delay:0s;}
+.petal:nth-child(2){left:18%; animation-duration:16s; animation-delay:3s;  width:7px;height:7px;}
+.petal:nth-child(3){left:38%; animation-duration:11s; animation-delay:6.5s;}
+.petal:nth-child(4){left:58%; animation-duration:14s; animation-delay:1.5s;width:8px;height:8px;}
+.petal:nth-child(5){left:77%; animation-duration:12s; animation-delay:4s;}
+.petal:nth-child(6){left:92%; animation-duration:15s; animation-delay:9s;  width:6px;height:6px;}
+
+/* ── HERO ── 響應式縮小版 */
+.hero {
+  position:relative;
+  background: linear-gradient(155deg,#fce8ed 0%,#f5f0ea 45%,#e8f4ed 100%);
+  /* 原本 padding:52px 24px 36px → 手機縮小 */
+  padding: clamp(24px, 5vw, 52px) 20px clamp(18px, 3vw, 36px);
+  text-align:center; overflow:hidden;
+}
+.hero::after {
+  content:''; position:absolute; bottom:0; left:0; right:0; height:3px;
+  background: linear-gradient(90deg,var(--pink),var(--green),var(--sky),var(--pink));
+}
+.hero-en {
+  font-size: clamp(.6rem, 2vw, .72rem);
+  letter-spacing:7px; color:var(--pink); text-transform:uppercase; margin-bottom:6px;
+}
+.hero-title {
+  font-family:'Playfair Display',serif;
+  /* 原本 clamp(2.4rem,9vw,3.8rem) → 縮小下限和上限 */
+  font-size: clamp(1.6rem, 7vw, 3rem);
+  color:var(--brown); font-weight:700; line-height:1.1; margin-bottom:4px;
+}
+.hero-title em { color:var(--pink); font-style:italic; }
+.hero-meta {
+  font-size: clamp(.75rem, 2.5vw, .9rem);
+  color:var(--text-mid); letter-spacing:2px; margin-top:8px;
+}
+.hero-tags { display:flex; flex-wrap:wrap; gap:6px; justify-content:center; margin-top:12px; }
+.hero-tag {
+  background:rgba(255,255,255,.8); border:1px solid var(--divider);
+  color:var(--brown-md); border-radius:4px;
+  padding: clamp(4px, 1vw, 6px) clamp(10px, 3vw, 16px);
+  font-size: clamp(.75rem, 2.2vw, .9rem);
+  font-weight:600; letter-spacing:1px;
+}
+
+/* NAV */
+.nav-wrap {
+  position:sticky; top:0; z-index:200;
+  background:rgba(253,250,246,.97); backdrop-filter:blur(10px);
+  border-bottom:2px solid var(--divider);
+}
+.nav-inner {
+  display:flex; overflow-x:auto; scrollbar-width:none;
+  max-width:640px; margin:0 auto; padding:0 8px;
+}
+.nav-inner::-webkit-scrollbar{ display:none; }
+.nav-btn {
+  flex-shrink:0; padding:14px 14px 10px;
+  border:none; background:transparent;
+  color:var(--text-soft); font-family:'Noto Serif TC',serif;
+  font-size:.88rem; font-weight:700; cursor:pointer;
+  border-bottom:3px solid transparent; transition:all .2s;
+  white-space:nowrap;
+}
+.nav-btn small { display:block; font-size:.62rem; letter-spacing:2px; opacity:.65; font-weight:400; margin-bottom:2px; text-transform:uppercase; }
+.nav-btn:hover { color:var(--brown); }
+.nav-btn.active { color:var(--brown); border-bottom-color:var(--pink); }
+
+/* MAIN */
+.main { max-width:640px; margin:0 auto; padding-bottom:80px; }
+.day-section { display:none; }
+.day-section.active { display:block; }
+
+/* DAY COVER */
+.day-cover { position:relative; height:240px; overflow:hidden; background:#c4b5a8; }
+.day-cover img { width:100%; height:100%; object-fit:cover; display:block; }
+.day-cover-overlay {
+  position:absolute; inset:0;
+  background:linear-gradient(to top,rgba(44,31,22,.72) 0%,rgba(44,31,22,.08) 55%);
+  display:flex; flex-direction:column; justify-content:flex-end;
+  padding:22px 24px;
+}
+.day-cover-label { font-size:.7rem; letter-spacing:5px; color:var(--pink); text-transform:uppercase; margin-bottom:5px; }
+.day-cover-title { font-family:'Playfair Display',serif; font-size:1.7rem; color:#fff; font-weight:700; line-height:1.2; }
+
+/* ── WEATHER BAR ── 智慧天氣版 */
+.weather-bar {
+  background:var(--brown); color:rgba(255,255,255,.92);
+  padding:12px 18px 10px;
+  font-size:.9rem; min-height:52px;
+}
+.wb-row1 { display:flex; gap:10px; flex-wrap:wrap; align-items:center; }
+.wb-temp-block { display:flex; flex-direction:column; align-items:center; min-width:52px; }
+.wb-period { font-size:.62rem; letter-spacing:1.5px; color:rgba(255,255,255,.55); text-transform:uppercase; margin-bottom:1px; }
+.wb-temp { font-size:1.05rem; font-weight:700; color:#ffd699; }
+.wb-divider-v { width:1px; height:34px; background:rgba(255,255,255,.2); margin:0 2px; }
+.wb-icon { font-size:1.2rem; }
+.wb-desc { font-size:.88rem; }
+.wb-mode-badge {
+  font-size:.62rem; letter-spacing:1.5px; padding:2px 8px;
+  border-radius:3px; font-weight:700; text-transform:uppercase;
+}
+.wb-mode-forecast { background:rgba(100,200,120,.25); color:#8fdc9f; }
+.wb-mode-climate  { background:rgba(255,210,100,.18); color:#ffd878; }
+.wb-loading { opacity:.6; font-size:.85rem; }
+
+/* 穿著建議列 */
+.wb-advice {
+  margin-top:8px; font-size:.82rem; color:rgba(255,255,255,.72);
+  padding-top:7px; border-top:1px solid rgba(255,255,255,.12);
+  display:flex; align-items:flex-start; gap:6px; line-height:1.5;
+}
+.wb-advice-icon { flex-shrink:0; font-size:.95rem; }
+
+/* 雨天警告 */
+.wb-rain-alert {
+  margin-top:7px; padding:7px 12px;
+  background:rgba(255,140,60,.18); border:1px solid rgba(255,160,80,.4);
+  border-radius:4px; font-size:.82rem; color:#ffc580;
+  display:flex; align-items:flex-start; gap:7px; line-height:1.5;
+}
+.wb-rain-icon { flex-shrink:0; font-size:1rem; }
+
+/* DAY SUMMARY */
+.day-summary {
+  margin:22px 20px; padding:18px 20px;
+  background:var(--pink-pale); border-left:4px solid var(--pink);
+  border-radius:0 6px 6px 0; font-size:1.05rem; line-height:1.85; color:var(--text-mid);
+}
+
+/* SPOT CARD */
+.spot-card {
+  margin:20px; background:#fff; border-radius:10px;
+  overflow:hidden; box-shadow:0 2px 16px rgba(90,62,43,.10);
+  border:1px solid var(--divider);
+}
+.spot-img { width:100%; height:210px; object-fit:cover; display:block; background:#d4c5b8; }
+.spot-body { padding:20px 20px 22px; }
+.spot-time-row { display:flex; align-items:center; gap:10px; margin-bottom:14px; flex-wrap:wrap; }
+.spot-time {
+  background:var(--pink-light); color:var(--brown);
+  font-size:.85rem; font-weight:700; padding:5px 14px;
+  border-radius:3px; letter-spacing:.5px;
+}
+.spot-tag { font-size:.72rem; letter-spacing:3px; color:var(--text-soft); text-transform:uppercase; }
+
+/* ── 開館時間標記 ── */
+.hours-badge {
+  display:inline-flex; align-items:center; gap:5px;
+  background:#f0f9f3; border:1px solid #a8d5b5;
+  color:#2d6b45; border-radius:3px;
+  padding:4px 10px; font-size:.78rem; font-weight:700; letter-spacing:.5px;
+}
+.hours-badge .hb-icon { font-size:.9rem; }
+.hours-badge .hb-closed { color:#c0392b; }
+
+.spot-name-row {
+  display:flex; align-items:flex-start;
+  justify-content:space-between; gap:12px; margin-bottom:14px;
+}
+.spot-name { font-size:1.35rem; font-weight:700; color:var(--brown); line-height:1.25; }
+.spot-name small { display:block; font-size:.78rem; color:var(--text-soft); letter-spacing:1.5px; font-weight:400; margin-top:3px; }
+.map-btn {
+  flex-shrink:0; display:inline-flex; align-items:center; gap:4px;
+  background:var(--brown); color:#fff; text-decoration:none;
+  padding:10px 15px; border-radius:5px;
+  font-size:.88rem; font-weight:700; font-family:'Noto Serif TC',serif;
+  transition:background .18s; white-space:nowrap;
+}
+.map-btn:hover { background:var(--pink); }
+.spot-desc { font-size:1rem; line-height:1.9; color:var(--text-mid); margin-bottom:18px; }
+
+/* INFO BLOCK */
+.info-block { margin-top:14px; }
+.info-block + .info-block { margin-top:12px; }
+.info-label { font-size:.72rem; letter-spacing:3px; text-transform:uppercase; color:var(--text-soft); margin-bottom:8px; font-weight:700; }
+.info-text { font-size:.97rem; line-height:1.8; color:var(--text); }
+.info-text strong { color:var(--brown); }
+
+/* BUY LIST */
+.buy-list { list-style:none; }
+.buy-list li {
+  padding:9px 0; border-bottom:1px solid var(--pink-light);
+  font-size:.97rem; color:var(--text); line-height:1.6;
+  display:flex; gap:10px; align-items:baseline;
+}
+.buy-list li:last-child { border-bottom:none; }
+.buy-list li::before { content:'—'; color:var(--pink); flex-shrink:0; font-weight:700; }
+
+/* TIP BOX */
+.tip-box {
+  background:var(--green-lt); border-left:3px solid var(--green);
+  border-radius:0 5px 5px 0; padding:12px 16px; margin-top:14px;
+}
+.tip-box .info-label { color:var(--green); }
+.tip-box .info-text { font-size:.95rem; color:var(--brown-md); }
+
+/* SEGMENT DIVIDER */
+.seg { display:flex; align-items:center; padding:4px 20px; }
+.seg-line { flex:1; height:1px; background:var(--divider); }
+.seg-dot { width:7px; height:7px; border-radius:50%; background:var(--pink); margin:0 10px; }
+
+/* HOTEL CARD */
+.hotel-card {
+  margin:20px; padding:20px;
+  background:linear-gradient(135deg,var(--sky-lt),var(--pink-pale));
+  border:1.5px solid #b8dce8; border-radius:10px;
+}
+.hotel-label { font-size:.7rem; letter-spacing:3px; text-transform:uppercase; color:var(--sky); font-weight:700; margin-bottom:6px; }
+.hotel-name { font-size:1.15rem; font-weight:700; color:var(--brown); margin-bottom:8px; }
+.hotel-detail { font-size:.97rem; color:var(--text-mid); line-height:1.8; }
+
+/* SECTION LABEL */
+.section-label { padding:26px 20px 0; font-size:.7rem; letter-spacing:4px; text-transform:uppercase; color:var(--text-soft); font-weight:700; }
+
+/* CHECKLIST */
+.checklist-wrap { padding:24px 20px 10px; }
+.cl-group { margin-bottom:28px; }
+.cl-group-title {
+  font-size:.72rem; letter-spacing:4px; text-transform:uppercase;
+  color:var(--pink); font-weight:700; margin-bottom:10px;
+  padding-bottom:8px; border-bottom:1px solid var(--divider);
+}
+.cl-item { display:flex; align-items:center; gap:14px; padding:13px 4px; border-bottom:1px solid #f0e8e2; cursor:pointer; }
+.cl-item:last-child { border-bottom:none; }
+.cl-item input[type=checkbox] { width:22px; height:22px; flex-shrink:0; accent-color:var(--green); cursor:pointer; }
+.cl-item label { font-size:1rem; color:var(--text); cursor:pointer; line-height:1.55; flex:1; }
+.cl-item input:checked + label { color:var(--text-soft); text-decoration:line-through; }
+
+/* EMERGENCY */
+.emergency { margin:0 0 24px; background:#fff8ed; border:2px solid var(--gold); border-radius:8px; overflow:hidden; }
+.emergency-head { background:var(--gold); color:#fff; padding:10px 18px; font-size:.85rem; font-weight:700; letter-spacing:2px; }
+.emergency-row {
+  display:flex; gap:12px; align-items:center;
+  padding:13px 18px; border-bottom:1px solid #f0ddb0;
+  font-size:1rem; color:var(--text);
+}
+.emergency-row:last-child { border-bottom:none; }
+.emergency-row a { color:var(--brown); font-weight:700; text-decoration:none; }
+
+/* FOOTER */
+.footer { background:var(--brown); color:rgba(255,255,255,.6); text-align:center; padding:24px 20px; font-size:.82rem; letter-spacing:2px; margin-bottom:44px; }
+.footer strong { color:var(--pink); }
+.bottom-bar { position:fixed; bottom:0; left:0; right:0; z-index:100; background:rgba(253,250,246,.96); border-top:1px solid var(--divider); padding:8px 20px; text-align:center; font-size:.78rem; color:var(--text-soft); letter-spacing:2px; }
+</style>
+</head>
+<body>
+ 
+<div class="petal"></div><div class="petal"></div><div class="petal"></div>
+<div class="petal"></div><div class="petal"></div><div class="petal"></div>
+ 
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-en">Spring Journey · May 2026</div>
+  <div class="hero-title">北海道<br><em>春の旅</em></div>
+  </div>
+ 
+<!-- NAV -->
+<div class="nav-wrap">
+  <div class="nav-inner">
+    <button class="nav-btn active" onclick="showDay(1,this)"><small>Day 1 · 5/25</small>函館夜景</button>
+    <button class="nav-btn" onclick="showDay(2,this)"><small>Day 2 · 5/26</small>大沼·小樽</button>
+    <button class="nav-btn" onclick="showDay(3,this)"><small>Day 3 · 5/27</small>札幌市區</button>
+    <button class="nav-btn" onclick="showDay(4,this)"><small>Day 4 · 5/28</small>尼克斯·熊牧場</button>
+    <button class="nav-btn" onclick="showDay(5,this)"><small>Day 5 · 5/29</small>五稜郭·返台</button>
+    <button class="nav-btn" onclick="showDay(6,this)"><small>行前</small>清單</button>
+  </div>
+</div>
+ 
+<div class="main">
+ 
+<!-- ═══ DAY 1 ═══ -->
+<div id="day1" class="day-section active">
+  <div class="day-cover">
+    <img src="https://www.hakodate.travel/cht/wp-content/themes/hakodate-city-multi/assets/images/about/mv-why-hakodate.jpg" alt="函館山夜景">
+    <div class="day-cover-overlay">
+      <div class="day-cover-label">Day 1 · 5月25日</div>
+      <div class="day-cover-title">桃園 → 函館百萬夜景</div>
+    </div>
+  </div>
+
+  <!-- 即時天氣 -->
+  <div class="weather-bar" id="wb1">
+    <span class="wb-loading">🌸 載入函館即時天氣中…</span>
+  </div>
+
+  <div class="day-summary">
+    搭乘星宇航空 JX860 史努比彩繪機從桃園出發，16:45 抵達函館，辦理入境後前往函館山，搭纜車登頂俯瞰米其林三星的世界三大夜景。
+  </div>
+ 
+  <div class="spot-card">
+    <img class="spot-img" src="https://aecom.com/tw/wp-content/uploads/2023/10/Taoyuan-1.jpg" alt="桃園機場出發">
+    <div class="spot-body">
+      <div class="spot-time-row"><span class="spot-time">12:00 出發</span><span class="spot-tag">起程</span></div>
+      <div class="spot-name-row">
+        <div class="spot-name">星宇航空 JX860<small>Taoyuan T2 → Hakodate HKD</small></div>
+      </div>
+      <p class="spot-desc">搭乘史努比聯名彩繪機出發，飛行約 3 小時 20 分，16:45 抵達函館空港。請於起飛前 2.5 小時到 T2 報到，建議提前線上 Check-in。</p>
+      <div class="tip-box">
+        <div class="info-label">注意事項</div>
+        <div class="info-text">護照、電子機票、日圓、旅遊保險卡放隨身包；行動電源只能隨身攜帶，不可托運。</div>
+      </div>
+    </div>
+  </div>
+ 
+  <div class="seg"><div class="seg-line"></div><div class="seg-dot"></div><div class="seg-line"></div></div>
+ 
+  <div class="spot-card">
+    <img class="spot-img" src="https://www.hakodate.travel/cht/wp-content/uploads/2022/12/01a.jpg" alt="函館山夜景">
+    <div class="spot-body">
+      <div class="spot-time-row">
+        <span class="spot-time">傍晚 纜車登山</span><span class="spot-tag">世界三大夜景</span>
+        <span class="hours-badge"><span class="hb-icon">🕐</span> 10:00 – 22:00（纜車）</span>
+      </div>
+      <div class="spot-name-row">
+        <div class="spot-name">函館山展望台<small>Mt. Hakodate Observatory · 334m</small></div>
+        <a href="https://maps.app.goo.gl/uZypbRqtXa4pEvic9" target="_blank" class="map-btn">地圖</a>
+      </div>
+      <p class="spot-desc">從山頂俯瞰，函館市區被津輕海峽與函館灣從兩側夾住，形成沙漏地形，入夜後萬燈如鑽石灑落。米其林綠色指南授予三星最高評價，與香港、義大利那不勒斯並稱世界三大夜景。日落後 20 分鐘是光線最美的黃金時刻。</p>
+      <div class="info-block">
+        <div class="info-label">歷史背景</div>
+        <div class="info-text">函館是日本幕末首批對外開港城市之一（1859年），山上曾建有軍事要塞，現已列為國家史跡。</div>
+      </div>
+      <div class="info-block">
+        <div class="info-label">實用資訊</div>
+        <div class="info-text">纜車來回票 <strong>成人 ¥1,500</strong>／山頂比山下低約 5°C，務必帶厚外套／若遇強風，改搭接駁巴士並退費 ¥1,500。</div>
+      </div>
+    </div>
+  </div>
+ 
+  <div class="section-label">今晚住宿</div>
+  <div class="hotel-card">
+    <div class="hotel-label">Night 1 · 函館</div>
+    <div class="hotel-name">湯之川溫泉酒店</div>
+    <div class="hotel-detail">函館代表性溫泉鄉，道南名湯可消解旅途疲勞。建議選用飯店海鮮會席晚餐，一嚐函館新鮮海產。</div>
+  </div>
+</div>
+ 
+<!-- ═══ DAY 2 ═══ -->
+<div id="day2" class="day-section">
+  <div class="day-cover">
+    <img src="https://images.unsplash.com/photo-1534351590666-13e3e96b5017?w=900&q=85" alt="小樽運河">
+    <div class="day-cover-overlay">
+      <div class="day-cover-label">Day 2 · 5月26日</div>
+      <div class="day-cover-title">大沼國定公園 → 小樽運河</div>
+    </div>
+  </div>
+
+  <div class="weather-bar" id="wb2">
+    <span class="wb-loading">🌸 載入天氣中…</span>
+  </div>
+
+  <div class="day-summary">
+    上午前往大沼、小沼國定公園，欣賞駒岳火山映入湖面的壯闊景致；下午移師小樽運河，走進明治大正年間繁華商港留下的石造倉庫群，品玻璃工藝、嚐起士蛋糕。
+  </div>
+ 
+  <div class="spot-card">
+    <img class="spot-img" src="https://assets.funliday.com/posts/wp-content/uploads/2024/11/20025427/slide_img20240912a-1600x1066.jpg" alt="大沼國定公園">
+    <div class="spot-body">
+      <div class="spot-time-row">
+        <span class="spot-time">上午</span><span class="spot-tag">湖景火山</span>
+        <span class="hours-badge"><span class="hb-icon">🕐</span> 全天開放</span>
+      </div>
+      <div class="spot-name-row">
+        <div class="spot-name">大沼・小沼國定公園<small>Onuma Quasi-National Park</small></div>
+        <a href="https://maps.google.com/?q=大沼国定公園" target="_blank" class="map-btn">地圖</a>
+      </div>
+      <p class="spot-desc">由大沼、小沼、じゅんさい沼三個湖泊組成，湖心映出活火山駒岳（1,131m）的倒影，湖面平靜如鏡，配合春日新綠極為療癒。可乘小船穿行湖中小島，感受北海道難得的寧靜自然秘境。</p>
+      <div class="info-block">
+        <div class="info-label">歷史背景</div>
+        <div class="info-text">駒岳為活火山，1929 年大噴發規模最大，湖岸島嶼地形正是歷次噴發熔岩堆積塑造而成，現仍持續監測中。</div>
+      </div>
+      <div class="info-block">
+        <div class="info-label">推薦體驗</div>
+        <div class="info-text">40 分鐘遊覽船（<strong>¥1,320</strong>）輕鬆賞遍全景；或租腳踏車自行環湖，路面平坦好騎，長輩亦適合。</div>
+      </div>
+    </div>
+  </div>
+ 
+  <div class="seg"><div class="seg-line"></div><div class="seg-dot"></div><div class="seg-line"></div></div>
+ 
+  <div class="spot-card">
+    <img class="spot-img" src="https://www.visit-hokkaido.jp/lsc/upfile/spot/0001/0040/10040_1_l.jpg" alt="小樽運河">
+    <div class="spot-body">
+      <div class="spot-time-row">
+        <span class="spot-time">下午 抵達</span><span class="spot-tag">浪漫水鄉</span>
+        <span class="hours-badge"><span class="hb-icon">🕐</span> 全天開放（商店 10:00–19:00）</span>
+      </div>
+      <div class="spot-name-row">
+        <div class="spot-name">小樽運河<small>Otaru Canal</small></div>
+        <a href="https://maps.google.com/?q=小樽運河" target="_blank" class="map-btn">地圖</a>
+      </div>
+      <p class="spot-desc">1914 年開鑿的小樽運河是北海道海上貿易的命脈，兩岸十餘棟紅磚石造倉庫改建為餐廳與工藝店。傍晚瓦斯燈點亮，燈影倒映水面，是北海道最有情調的夜景之一。</p>
+      <div class="info-block">
+        <div class="info-label">歷史背景</div>
+        <div class="info-text">明治至昭和初期，小樽是北海道最大商業港口，「北の華爾街」美稱來自當年數十家銀行聚集於此，其繁榮程度曾凌駕於札幌之上。</div>
+      </div>
+      <div class="info-block">
+        <div class="info-label">必逛地點</div>
+        <ul class="buy-list">
+          <li><strong>北一硝子館</strong> -> 北海道最大玻璃藝品店，手工吹製、可現場訂製，石油燈為鎮店之寶。</li>
+          <li><strong>小樽音樂盒堂</strong> -> 三層洋館內展示逾 3,000 件手搖音樂盒，長輩最愛駐足把玩。</li>
+          <li><strong>堺町通商店街</strong> -> 六花亭、LeTAO、北菓楼一字排開，伴手禮一網打盡。</li>
+        </ul>
+      </div>
+      <div class="info-block">
+        <div class="info-label">必買 / 必吃</div>
+        <ul class="buy-list">
+          <li><strong>LeTAO 雙層起士蛋糕</strong> -> 北海道起士與義大利馬斯卡彭雙層疊製，入口即化，小樽本店限定口味最多。</li>
+          <li><strong>六花亭 奶油夾心餅</strong> -> 北海道伴手禮代表，白巧克力奶油夾薄脆餅乾，常溫可帶回台灣。</li>
+          <li><strong>北一硝子手工玻璃</strong> -> 酒杯、風鈴、小擺件，是質感最高的在地紀念品。</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+ 
+  <div class="section-label">今晚住宿</div>
+  <div class="hotel-card">
+    <div class="hotel-label">Night 2 · 札幌</div>
+    <div class="hotel-name">JR 塔日航飯店 札幌</div>
+    <a href="https://maps.app.goo.gl/uh9at2Xz51Gfev949" target="_blank" class="map-btn">地圖</a>
+    <div class="hotel-detail">位於 JR 札幌站直結 38 樓，購物、交通極為便利。高樓層可眺望大通公園與藻岩山夜景。</div>
+  </div>
+</div>
+ 
+<!-- ═══ DAY 3 ═══ -->
+<div id="day3" class="day-section">
+  <div class="day-cover">
+    <img src="https://static.gltjp.com/glt/data/article/21000/20215/20221230_193906_59ca7270_w1920.webp" alt="札幌大通公園">
+    <div class="day-cover-overlay">
+      <div class="day-cover-label">Day 3 · 5月27日</div>
+      <div class="day-cover-title">札幌市區巡禮</div>
+    </div>
+  </div>
+
+  <div class="weather-bar" id="wb3">
+    <span class="wb-loading">🌸 載入札幌即時天氣中…</span>
+  </div>
+
+  <div class="day-summary">
+    上午遊覽白色戀人公園、北海道神宮及大通公園電視塔；晚上自由探索狸小路商店街，採買土產與品嚐道地拉麵，飽覽札幌城市魅力。
+  </div>
+ 
+  <div class="spot-card">
+    <img class="spot-img" src="https://image.kkday.com/v2/image/get/c_fill%2Cq_55%2Ct_webp%2Cw_960/s1.kkday.com/product_18175/20230606054435_ffbiI/jpg" alt="白色戀人公園">
+    <div class="spot-body">
+      <div class="spot-time-row">
+        <span class="spot-time">上午</span><span class="spot-tag">甜點工廠</span>
+        <span class="hours-badge"><span class="hb-icon">🕐</span> 10:00 – 18:00</span>
+      </div>
+      <div class="spot-name-row">
+        <div class="spot-name">白色戀人公園<small>Shiroi Koibito Park</small></div>
+        <a href="https://maps.google.com/?q=白い恋人パーク+札幌" target="_blank" class="map-btn">地圖</a>
+      </div>
+      <p class="spot-desc">英式都鐸庭園主題的巧克力工廠，可透過玻璃觀賞白色戀人餅乾的生產流程，館內展示北海道百年糖果歷史。玫瑰花園與鐘樓在春天特別美，春日限定口味只有現場才能買到。</p>
+      <div class="info-block">
+        <div class="info-label">必買</div>
+        <ul class="buy-list">
+          <li><strong>白色戀人工廠限定禮盒</strong> -> 包裝種類最多，含台灣未引進的季節限定口味，最適合在此一次買齊。</li>
+          <li><strong>巧克力手工彩繪體驗</strong> -> 預約課程（約 ¥1,200），親手彩繪一盒白色戀人帶回家。</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+ 
+  <div class="seg"><div class="seg-line"></div><div class="seg-dot"></div><div class="seg-line"></div></div>
+ 
+  <div class="spot-card">
+    <img class="spot-img" src="https://www.visit-hokkaido.jp/lsc/upfile/spot/0001/0001/10001_1_l.jpg" alt="北海道神宮">
+    <div class="spot-body">
+      <div class="spot-time-row">
+        <span class="spot-time">上午</span><span class="spot-tag">百年神社</span>
+        <span class="hours-badge"><span class="hb-icon">🕐</span> 06:00 – 17:00</span>
+      </div>
+      <div class="spot-name-row">
+        <div class="spot-name">北海道神宮<small>Hokkaido Jingu Shrine</small></div>
+        <a href="https://maps.google.com/?q=北海道神宮" target="_blank" class="map-btn">地圖</a>
+      </div>
+      <p class="spot-desc">明治 2 年（1869年）創建，供奉開拓三神，是北海道地位最高的神社。境內被圓山原始林圍繞，5 月約 1,400 棵染井吉野櫻盛開，是札幌最人氣的賞花聖地，氣氛莊嚴清幽。</p>
+      <div class="info-block">
+        <div class="info-label">推薦體驗</div>
+        <div class="info-text">抽御神籤（¥200），購買北海道限定御守；境內六花亭茶屋供應名物「判官さま」紅豆餅，是來此必嚐的在地點心。</div>
+      </div>
+    </div>
+  </div>
+ 
+  <div class="seg"><div class="seg-line"></div><div class="seg-dot"></div><div class="seg-line"></div></div>
+ 
+  <div class="spot-card">
+    <img class="spot-img" src="https://www.visit-hokkaido.jp/lsc/upfile/spot/0001/0011/10011_3_l.jpg" alt="大通公園電視塔">
+    <div class="spot-body">
+      <div class="spot-time-row">
+        <span class="spot-time">午後</span><span class="spot-tag">城市地標</span>
+        <span class="hours-badge"><span class="hb-icon">🕐</span> 09:00 – 22:00（電視塔）</span>
+      </div>
+      <div class="spot-name-row">
+        <div class="spot-name">大通公園 & 電視塔<small>Odori Park / Sapporo TV Tower</small></div>
+        <a href="https://maps.app.goo.gl/p6iVnkNF1R9jAAbi8" target="_blank" class="map-btn">地圖</a>
+      </div>
+      <p class="spot-desc">東西橫貫市中心 1.5 公里的帶狀公園，5 月丁香花盛開、清香四溢。公園東端的紅色電視塔建於 1957 年，登上 90 公尺展望台，大通公園全景與遠方山脈一覽無遺。</p>
+      <div class="info-block">
+        <div class="info-label">實用資訊</div>
+        <div class="info-text">電視塔展望台 <strong>成人 ¥800</strong>；公園長椅是午餐野餐的好地點，附近超商可購買北海道限定便當。</div>
+      </div>
+    </div>
+  </div>
+ 
+  <div class="seg"><div class="seg-line"></div><div class="seg-dot"></div><div class="seg-line"></div></div>
+ 
+  <div class="spot-card">
+    <img class="spot-img" src="https://images.trvl-media.com/place/6292966/3fc7797f-0414-41ae-acdd-7583d718129b.jpg" alt="狸小路商店街">
+    <div class="spot-body">
+      <div class="spot-time-row">
+        <span class="spot-time">晚上 自由活動</span><span class="spot-tag">採買天堂</span>
+        <span class="hours-badge"><span class="hb-icon">🕐</span> 10:00 – 21:00（各店略異）</span>
+      </div>
+      <div class="spot-name-row">
+        <div class="spot-name">狸小路商店街<small>Tanuki-koji Shopping Street</small></div>
+        <a href="https://maps.app.goo.gl/bPJ9TPMhmKdqARo87" target="_blank" class="map-btn">地圖</a>
+      </div>
+      <p class="spot-desc">創立於 1873 年、全長 900 公尺的有頂蓋商店街，1 到 7 丁目集合逾 200 家店舖，雨天也能輕鬆血拼。從藥妝、北海道土產到拉麵店一應俱全，是長輩最喜歡的採買天堂。</p>
+      <div class="info-block">
+        <div class="info-label">必買伴手禮</div>
+        <ul class="buy-list">
+          <li><strong>Royce 生巧克力</strong> -> 北海道牛奶製作，口感絲滑濃郁，需冷藏；機場可買附保冷盒。</li>
+          <li><strong>北菓楼 夢不思議</strong> -> 蝦夷松形狀的鬆軟蛋糕，香甜可口，常溫可帶回。</li>
+          <li><strong>藥妝 & 保養品</strong> -> 肌研、碧柔、龍角散、EVE 止痛藥是必掃清單。</li>
+          <li><strong>北海道昆布 & 干貝</strong> -> 品質遠勝台灣超市，適合買來饋贈親友。</li>
+        </ul>
+      </div>
+      <div class="tip-box">
+        <div class="info-label">晚餐推薦</div>
+        <div class="info-text">「味の時計台」本店就在薄野一帶，濃郁奶油玉米味噌拉麵是北海道靈魂滋味，一碗約 ¥1,100。</div>
+      </div>
+    </div>
+  </div>
+ 
+  <div class="section-label">今晚住宿</div>
+  <div class="hotel-card">
+    <div class="hotel-label">Night 3 · 札幌</div>
+    <div class="hotel-name">JR 塔日航飯店 札幌</div>
+    <a href="https://maps.app.goo.gl/uh9at2Xz51Gfev949" target="_blank" class="map-btn">地圖</a>
+    <div class="hotel-detail">同前晚，隔天早晨可至地下街 Paseo 購買最後一波伴手禮，再輕鬆轉乘前往下一站。</div>
+  </div>
+</div>
+ 
+<!-- ═══ DAY 4 ═══ -->
+<div id="day4" class="day-section">
+  <div class="day-cover">
+    <img src="https://www.visit-hokkaido.jp/lsc/upfile/spot/0001/0049/10049_8_l.jpg" alt="昭和新山">
+    <div class="day-cover-overlay">
+      <div class="day-cover-label">Day 4 · 5月28日</div>
+      <div class="day-cover-title">尼克斯海洋公園 → 昭和新山熊牧場</div>
+    </div>
+  </div>
+
+  <div class="weather-bar" id="wb4">
+    <span class="wb-loading">🌸 載入登別即時天氣中…</span>
+  </div>
+
+  <div class="day-summary">
+    上午前往登別尼克斯海洋公園看企鵝大遊行與海底隧道；下午到昭和新山熊牧場餵食棕熊、感受活火山地貌震撼；晚上入住二世谷花園日航酒店，享用本次旅程最大亮點：螃蟹吃到飽。
+  </div>
+ 
+  <div class="spot-card">
+    <img class="spot-img" src="https://www.visit-hokkaido.jp/lsc/upfile/spot/0001/0156/10156_10_l.jpg" alt="企鵝海洋公園">
+    <div class="spot-body">
+      <div class="spot-time-row">
+        <span class="spot-time">上午</span><span class="spot-tag">海洋公園</span>
+        <span class="hours-badge"><span class="hb-icon">🕐</span> 09:00 – 17:00</span>
+      </div>
+      <div class="spot-name-row">
+        <div class="spot-name">尼克斯海洋公園<small>Nixe Marine Park Noboribetsu</small></div>
+        <a href="https://maps.google.com/?q=のぼりべつニクス海洋公園" target="_blank" class="map-btn">地圖</a>
+      </div>
+      <p class="spot-desc">以北歐城堡為主題的海洋公園，圈養逾 2,500 種魚類的海底隧道讓人彷彿置身海中；最受歡迎的節目是國王企鵝大遊行——數十隻體型碩大的企鵝在飼育員帶領下漫步園區，近距離接觸令人忍不住歡呼。</p>
+      <div class="info-block">
+        <div class="info-label">必看節目</div>
+        <ul class="buy-list">
+          <li><strong>國王企鵝大遊行</strong> -> 每日固定時間舉行，建議提早 15 分鐘佔位，可近距離拍照且不需另購票。</li>
+          <li><strong>30 公尺海底隧道</strong> -> 鯊魚和魟魚從頭頂游過，視覺震撼十足，老人家也走得輕鬆。</li>
+          <li><strong>海豚表演秀</strong> -> 每日多場，互動性強，老小咸宜。</li>
+        </ul>
+      </div>
+      <div class="info-block">
+        <div class="info-label">票價</div>
+        <div class="info-text">成人 <strong>¥2,500</strong>，含全館入場與所有表演；官網預購可省約 ¥200。</div>
+      </div>
+    </div>
+  </div>
+ 
+  <div class="seg"><div class="seg-line"></div><div class="seg-dot"></div><div class="seg-line"></div></div>
+ 
+  <div class="spot-card">
+    <img class="spot-img" src="https://www.visit-hokkaido.jp/lsc/upfile/spot/0001/0538/10538_1_l.jpg" alt="昭和新山熊牧場">
+    <div class="spot-body">
+      <div class="spot-time-row">
+        <span class="spot-time">下午</span><span class="spot-tag">活火山·棕熊</span>
+        <span class="hours-badge"><span class="hb-icon">🕐</span> 08:00 – 17:00</span>
+      </div>
+      <div class="spot-name-row">
+        <div class="spot-name">昭和新山熊牧場<small>Showa Shinzan Bear Ranch</small></div>
+        <a href="https://maps.google.com/?q=昭和新山熊牧場" target="_blank" class="map-btn">地圖</a>
+      </div>
+      <p class="spot-desc">昭和新山是 1943 年二戰期間從麥田中緩緩隆起的活火山熔岩丘，被列入世界地質公園，高度達 398 公尺。山麓熊牧場飼育超過 100 頭蝦夷棕熊，遊客投入食物後，熊熊以前肢站立接食的逗趣表情令人捧腹大笑。</p>
+      <div class="info-block">
+        <div class="info-label">歷史背景</div>
+        <div class="info-text">昭和新山從 1943 年地震開始活動，歷時兩年隆起成形，是極罕見的「人類完整記錄火山誕生過程」，因此被指定為國家特別天然紀念物。</div>
+      </div>
+      <div class="info-block">
+        <div class="info-label">推薦體驗</div>
+        <ul class="buy-list">
+          <li><strong>餵食棕熊</strong> -> 購買熊餅乾（¥100）投入欄杆缺口，看熊熊雙手接食，可愛度破表。</li>
+          <li><strong>有珠山纜車</strong> -> 來回¥1,800，俯瞰洞爺湖全景與 2000 年噴火口遺跡，震撼人心。</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+ 
+  <div class="section-label">今晚住宿 ✦ 升等輕奢</div>
+  <div class="hotel-card">
+    <div class="hotel-label">Night 4 · 二世谷</div>
+    <div class="hotel-name">二世谷花園日航酒店</div>
+    <a href="https://maps.app.goo.gl/dWSvaQAZ4qS7C1L76" target="_blank" class="map-btn">地圖</a>
+    <div class="hotel-detail">世界級滑雪勝地二世谷的五星旗艦酒店，面向羊蹄山，入住後享用本次旅程最大亮點——<strong>螃蟹吃到飽晚餐</strong>：毛蟹、松葉蟹、帝王蟹三種輪番登場，讓您大快朵頤。</div>
+  </div>
+</div>
+ 
+<!-- ═══ DAY 5 ═══ -->
+<div id="day5" class="day-section">
+  <div class="day-cover">
+    <img src="https://www.visit-hokkaido.jp/lsc/upfile/spot/0001/0035/10035_1_l.jpg" alt="五稜郭">
+    <div class="day-cover-overlay">
+      <div class="day-cover-label">Day 5 · 5月29日</div>
+      <div class="day-cover-title">五稜郭 → 女子修道院 → 返台</div>
+    </div>
+  </div>
+
+  <div class="weather-bar" id="wb5">
+    <span class="wb-loading">🌸 載入函館即時天氣中…</span>
+  </div>
+
+  <div class="day-summary">
+    最後一天！上午造訪星形歐式名城五稜郭公園，接著前往女子修道院品嚐限定霜淇淋；下午從函館空港搭乘 JX861 返回桃園，帶著滿滿回憶踏上歸途。
+  </div>
+ 
+  <div class="spot-card">
+    <img class="spot-img" src="https://www.visit-hokkaido.jp/lsc/upfile/spot/0001/0035/10035_4_l.jpg" alt="五稜郭">
+    <div class="spot-body">
+      <div class="spot-time-row">
+        <span class="spot-time">上午</span><span class="spot-tag">幕末名城</span>
+        <span class="hours-badge"><span class="hb-icon">🕐</span> 公園全天・塔 09:00–18:00</span>
+      </div>
+      <div class="spot-name-row">
+        <div class="spot-name">五稜郭公園 & 塔<small>Goryokaku Park & Tower</small></div>
+        <a href="https://maps.google.com/?q=五稜郭タワー+函館市" target="_blank" class="map-btn">地圖</a>
+      </div>
+      <p class="spot-desc">日本唯一的西洋星形要塞，1864 年仿法國沃邦式棱堡設計建成，五角形護城河在空中俯瞰如完美星芒。1868–1869 年戊辰戰爭最後一役「箱館戰爭」即在此地落幕，是日本近代史的關鍵現場。五月間 1,600 株染井吉野櫻花瓣飄落護城河面，極為壯觀。</p>
+      <div class="info-block">
+        <div class="info-label">歷史背景</div>
+        <div class="info-text">五稜郭是江戶幕府仿歐洲星形要塞建造的防禦工事，也是日本第一座西洋式城郭。幕府軍最後在此投降，正式終結了幕府時代，開啟明治維新。</div>
+      </div>
+      <div class="info-block">
+        <div class="info-label">實用資訊</div>
+        <div class="info-text">五稜郭塔展望台（107 公尺）<strong>成人 ¥1,000</strong>，可 360° 俯瞰星形全貌及五月花海，絕對值得上去。</div>
+      </div>
+    </div>
+  </div>
+ 
+  <div class="seg"><div class="seg-line"></div><div class="seg-dot"></div><div class="seg-line"></div></div>
+ 
+  <div class="spot-card">
+    <img class="spot-img" src="https://tahokkaido.com/wp-content/uploads/2025/11/hakodate-trappistine-monastery-01-1024x683.jpg" alt="女子修道院">
+    <div class="spot-body">
+      <div class="spot-time-row">
+        <span class="spot-time">上午</span><span class="spot-tag">百年修道院</span>
+        <span class="hours-badge"><span class="hb-icon">🕐</span> 08:00 – 17:00</span>
+      </div>
+      <div class="spot-name-row">
+        <div class="spot-name">天使之丘 女子修道院<small>Trappistine Monastery</small></div>
+        <a href="https://maps.app.goo.gl/6h6ysZEjapX3Yuwo6" target="_blank" class="map-btn">地圖</a>
+      </div>
+      <p class="spot-desc">1898 年由法國修女創立，是日本最早的女子修道院，哥德式磚紅建築佇立丘陵之上，蘋果樹與玫瑰園環繞，氣氛靜謐神聖。院內修女親手製作的奶油糖與霜淇淋，是赴函館旅人必嚐之物，風味與店鋪截然不同。</p>
+      <div class="info-block">
+        <div class="info-label">必吃 / 必買</div>
+        <ul class="buy-list">
+          <li><strong>修道院霜淇淋</strong> -> 院內自養乳牛鮮奶製作，濃醇甘甜、入口即化，是此行甜點最高峰，贈送遊客的人氣第一名。</li>
+          <li><strong>修道院奶油糖</strong> -> 百年配方手工製作，包裝精緻典雅，適合作為高質感伴手禮回贈親友。</li>
+        </ul>
+      </div>
+      <div class="tip-box">
+        <div class="info-label">溫馨提醒</div>
+        <div class="info-text">修道院為宗教設施，院內部分區域不開放，請保持安靜，拍照前注意告示。</div>
+      </div>
+    </div>
+  </div>
+ 
+  <div class="seg"><div class="seg-line"></div><div class="seg-dot"></div><div class="seg-line"></div></div>
+ 
+  <div class="spot-card">
+    <img class="spot-img" src="https://d1grca2t3zpuug.cloudfront.net/2025/09/2025hakodateairport3-1920x1310-1759065094.webp" alt="返台班機">
+    <div class="spot-body">
+      <div class="spot-time-row"><span class="spot-time">17:45 搭機返台</span><span class="spot-tag">回程</span></div>
+      <div class="spot-name-row">
+        <div class="spot-name">星宇航空 JX861 返台<small>Hakodate HKD → Taoyuan TPE</small></div>
+      </div>
+      <p class="spot-desc">從函館空港搭乘 JX861 返回桃園，飛行約 3 小時 20 分。請提前 2 小時到機場，機場內仍有函館限定牛奶糖、烏賊墨汁土司等在地商品可補貨。</p>
+      <div class="tip-box">
+        <div class="info-label">行李注意</div>
+        <div class="info-text">冷藏類（Royce 生巧克力、修道院奶油糖）需托運；白色戀人、六花亭等常溫食品可帶上機。請確認行李不超重（星宇經濟艙限 23 公斤）。</div>
+      </div>
+    </div>
+  </div>
+</div>
+ 
+<!-- ═══ CHECKLIST ═══ -->
+<div id="day6" class="day-section">
+  <div class="day-cover" style="height:160px;">
+    <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=900&q=85" alt="北海道">
+    <div class="day-cover-overlay">
+      <div class="day-cover-label">行前準備</div>
+      <div class="day-cover-title">出發前確認清單</div>
+    </div>
+  </div>
+  <div class="checklist-wrap">
+    <div class="emergency">
+      <div class="emergency-head">緊急聯絡資訊</div>
+      <div class="emergency-row">日本急救：<a href="tel:119">119</a> &nbsp; 報警：<a href="tel:110">110</a></div>
+      <div class="emergency-row">台灣駐日辦事處（東京）：<a href="tel:+81352806000">+81-3-5280-6000</a></div>
+      <div class="emergency-row">星宇航空緊急服務：<a href="tel:+886225912626">+886-2-2591-2626</a></div>
+      <div class="emergency-row">信用卡掛失：查看卡背面國際緊急電話</div>
+    </div>
+    <div class="cl-group">
+      <div class="cl-group-title">重要文件</div>
+      <label class="cl-item"><input type="checkbox"><label>護照（有效期超過 6 個月）</label></label>
+      <label class="cl-item"><input type="checkbox"><label>電子機票（截圖存手機）</label></label>
+      <label class="cl-item"><input type="checkbox"><label>旅遊保險卡（含緊急醫療）</label></label>
+      <label class="cl-item"><input type="checkbox"><label>酒店確認書（印出或截圖）</label></label>
+      <label class="cl-item"><input type="checkbox"><label>Visit Japan Web 入境登記完成</label></label>
+    </div>
+    <div class="cl-group">
+      <div class="cl-group-title">金錢與通訊</div>
+      <label class="cl-item"><input type="checkbox"><label>日圓現金（建議每人帶 ¥30,000 以上）</label></label>
+      <label class="cl-item"><input type="checkbox"><label>國際信用卡（VISA / MasterCard）</label></label>
+      <label class="cl-item"><input type="checkbox"><label>日本 SIM 卡或 Wi-Fi 分享器</label></label>
+      <label class="cl-item"><input type="checkbox"><label>行動電源（只能隨身帶，不可托運）</label></label>
+    </div>
+    <div class="cl-group">
+      <div class="cl-group-title">衣物與日常用品</div>
+      <label class="cl-item"><input type="checkbox"><label>薄外套（白天 15–17°C）</label></label>
+      <label class="cl-item"><input type="checkbox"><label>厚外套或輕羽絨（函館山頂·二世谷晚間 5–6°C）</label></label>
+      <label class="cl-item"><input type="checkbox"><label>舒適好走的鞋（每天預計步行 8,000 步以上）</label></label>
+      <label class="cl-item"><input type="checkbox"><label>輕便雨衣或折疊傘</label></label>
+      <label class="cl-item"><input type="checkbox"><label>防曬乳（5 月紫外線較強）</label></label>
+      <label class="cl-item"><input type="checkbox"><label>個人常備藥（腸胃藥、感冒藥、止痛藥）</label></label>
+      <label class="cl-item"><input type="checkbox"><label>溫泉毛巾及換洗衣物（Day 1 湯之川、Day 4 二世谷）</label></label>
+    </div>
+    <div class="cl-group">
+      <div class="cl-group-title">手機設定</div>
+      <label class="cl-item"><input type="checkbox"><label>下載 Google Maps 北海道離線地圖</label></label>
+      <label class="cl-item"><input type="checkbox"><label>下載 Google 翻譯日文離線包</label></label>
+      <label class="cl-item"><input type="checkbox"><label>航班動態通知開啟</label></label>
+      <label class="cl-item"><input type="checkbox"><label>緊急聯絡人電話存入手機</label></label>
+    </div>
+    <div class="cl-group">
+      <div class="cl-group-title">行李最後確認</div>
+      <label class="cl-item"><input type="checkbox"><label>行李重量確認（星宇經濟艙托運限 23 公斤）</label></label>
+      <label class="cl-item"><input type="checkbox"><label>液體物品裝透明袋（隨身限 100ml 以下）</label></label>
+      <label class="cl-item"><input type="checkbox"><label>行李牌寫好（姓名、電話、飯店地址）</label></label>
+      <label class="cl-item"><input type="checkbox"><label>冷藏伴手禮（Royce 等）確認托運方式</label></label>
+    </div>
+  </div>
+</div>
+ 
+</div><!-- /main -->
+ 
+<div class="footer">
+  <strong>北海道 2026 春之旅</strong><br>
+</div>
+<div class="bottom-bar">北海道 2026 · 五天四夜春之旅</div>
+ 
+<script>
+// ════════════════════════════════════════════
+//  智慧天氣系統
+//  ・旅行前 → Open-Meteo 歷史氣候統計（過去 10 年 5 月同期均值）
+//  ・進入 16 天預報窗口 → 自動切換成真實預報
+//  ・區分「早晨 / 白天 / 夜間」三段溫度
+//  ・下雨機率 ≥ 40% 或降水量 > 1mm → 橘色雨天提醒
+// ════════════════════════════════════════════
+
+const WMO = {
+  0:['☀️','晴天'], 1:['🌤','晴時多雲'], 2:['⛅','部分多雲'], 3:['☁️','陰天'],
+  45:['🌫','有霧'], 48:['🌫','結霧'],
+  51:['🌦','輕毛毛雨'], 53:['🌦','毛毛雨'], 55:['🌧','濃毛毛雨'],
+  61:['🌧','小雨'], 63:['🌧','中雨'], 65:['🌧','大雨'],
+  71:['🌨','小雪'], 73:['🌨','中雪'], 75:['❄️','大雪'], 77:['🌨','雪粒'],
+  80:['🌦','陣雨'], 81:['🌧','中陣雨'], 82:['⛈','強陣雨'],
+  85:['🌨','陣雪'], 86:['❄️','強陣雪'],
+  95:['⛈','雷雨'], 96:['⛈','雷冰雹'], 99:['⛈','強雷冰雹'],
+};
+
+const RAIN_WMO = new Set([51,53,55,61,63,65,80,81,82,95,96,99]);
+
+// 穿著建議
+function clothingAdvice(morningT, dayT, nightT, isRainy) {
+  const parts = [];
+  // 白天建議
+  if (dayT >= 22)       parts.push('白天可穿短袖或輕薄長袖');
+  else if (dayT >= 17)  parts.push('白天長袖 + 薄外套');
+  else if (dayT >= 12)  parts.push('白天毛衣或厚長袖 + 夾克');
+  else                  parts.push('白天毛衣 + 厚外套');
+  // 早晨建議
+  if (morningT < 12)    parts.push('早晨涼，出門多帶一件');
+  // 夜間建議
+  if (nightT < 10)      parts.push('夜晚較冷需加羽絨或厚外套');
+  else if (nightT < 14) parts.push('夜間涼意明顯，備薄外套');
+  if (isRainy)          parts.push('☔ 記得帶傘或輕便雨衣');
+  return parts.join('；');
+}
+
+// 雨天提醒文案
+function rainAlertText(pop, precip, wmo) {
+  const [,desc] = WMO[wmo] || ['',''];
+  if (precip >= 5)  return `預計${desc}，降水量可能達 ${precip.toFixed(1)} mm，建議攜帶雨衣並注意戶外行程`;
+  if (precip >= 1)  return `預計${desc}，有些許降雨（約 ${precip.toFixed(1)} mm），帶把折疊傘就好`;
+  if (pop >= 60)    return `降雨機率 ${pop}%，出門備傘以防萬一`;
+  if (pop >= 40)    return `降雨機率 ${pop}%，建議隨身帶傘`;
+  return null;
+}
+
+// 格式化 weather bar HTML
+function renderWeatherBar(bar, cfg, data, isClimatology) {
+  const { label } = cfg;
+  const { morningT, dayT, nightT, wmo, pop, precip } = data;
+  const [icon, desc] = WMO[wmo] || ['🌡','—'];
+  const isRainy = RAIN_WMO.has(wmo) || pop >= 40 || precip >= 1;
+  const advice  = clothingAdvice(morningT, dayT, nightT, isRainy);
+  const rainMsg = rainAlertText(pop, precip, wmo);
+  const modeLabel = isClimatology
+    ? `<span class="wb-mode-badge wb-mode-climate">歷史均值預測</span>`
+    : `<span class="wb-mode-badge wb-mode-forecast">即時預報</span>`;
+
+  bar.innerHTML = `
+    <div class="wb-row1">
+      <span class="wb-icon">${icon}</span>
+      <span><strong>${label}</strong> · ${desc}</span>
+      ${modeLabel}
+      <div class="wb-divider-v"></div>
+      <div class="wb-temp-block">
+        <span class="wb-period">早晨</span>
+        <span class="wb-temp">${morningT}°</span>
+      </div>
+      <div class="wb-temp-block">
+        <span class="wb-period">白天</span>
+        <span class="wb-temp">${dayT}°</span>
+      </div>
+      <div class="wb-temp-block">
+        <span class="wb-period">夜間</span>
+        <span class="wb-temp">${nightT}°</span>
+      </div>
+    </div>
+    <div class="wb-advice"><span class="wb-advice-icon">👗</span>${advice}</div>
+    ${rainMsg ? `<div class="wb-rain-alert"><span class="wb-rain-icon">🌂</span>${rainMsg}</div>` : ''}
+  `;
+}
+
+// ── 各天設定 ──
+const WEATHER_CFG = [
+  { id:'wb1', label:'函館', lat:41.7686, lon:140.7290, date:'2026-05-25' },
+  { id:'wb2', label:'小樽', lat:43.1907, lon:140.9947, date:'2026-05-26' },
+  { id:'wb3', label:'札幌', lat:43.0618, lon:141.3545, date:'2026-05-27' },
+  { id:'wb4', label:'登別', lat:42.4811, lon:141.1014, date:'2026-05-28' },
+  { id:'wb5', label:'函館', lat:41.7686, lon:140.7290, date:'2026-05-29' },
+];
+
+// 判斷今天是否在 Open-Meteo forecast 支援的 16 天窗口內
+function isInForecastWindow(dateStr) {
+  const today = new Date(); today.setHours(0,0,0,0);
+  const target = new Date(dateStr); target.setHours(0,0,0,0);
+  const diffDays = (target - today) / 86400000;
+  return diffDays >= 0 && diffDays <= 15; // 0 = 今天, 15 = 16天後
+}
+
+// ── 模式 A：真實預報（進入 16 天窗口後） ──
+async function fetchForecast(cfg) {
+  const url = `https://api.open-meteo.com/v1/forecast`
+    + `?latitude=${cfg.lat}&longitude=${cfg.lon}`
+    + `&hourly=temperature_2m,precipitation_probability,precipitation,weathercode`
+    + `&daily=weathercode,temperature_2m_max,temperature_2m_min,precipitation_sum,precipitation_probability_max`
+    + `&timezone=Asia%2FTokyo`
+    + `&start_date=${cfg.date}&end_date=${cfg.date}`;
+
+  const res  = await fetch(url);
+  const d    = await res.json();
+
+  // 從 hourly 抓早晨(6-9h)、白天(12-15h)、夜間(21-23h) 的平均溫
+  const times = d.hourly.time; // e.g. ["2026-05-25T00:00", ...]
+  const temps = d.hourly.temperature_2m;
+  const datePrefix = cfg.date;
+  const slice = (hStart, hEnd) => {
+    let vals = [];
+    times.forEach((t, i) => {
+      if (!t.startsWith(datePrefix)) return;
+      const h = parseInt(t.slice(11,13));
+      if (h >= hStart && h <= hEnd) vals.push(temps[i]);
+    });
+    return vals.length ? Math.round(vals.reduce((a,b)=>a+b,0)/vals.length) : null;
+  };
+
+  const morningT = slice(6,9)  ?? d.daily.temperature_2m_min[0] ?? '--';
+  const dayT     = slice(12,15)?? d.daily.temperature_2m_max[0] ?? '--';
+  const nightT   = slice(21,23)?? Math.round(d.daily.temperature_2m_min[0]) ?? '--';
+  const wmo      = d.daily.weathercode[0];
+  const pop      = d.daily.precipitation_probability_max[0] ?? 0;
+  const precip   = d.daily.precipitation_sum[0] ?? 0;
+
+  return { morningT, dayT, nightT, wmo, pop, precip };
+}
+
+// ── 模式 B：歷史氣候均值（出發前超過 16 天） ──
+// Open-Meteo historical-forecast API，抓過去 3 年同月同日
+async function fetchClimatology(cfg) {
+  // 取同月同日的 2023/2024/2025 資料取平均
+  const mm = cfg.date.slice(5); // "05-25"
+  const years = [2023, 2024, 2025];
+  let mornings=[], days=[], nights=[], wmos=[];
+
+  await Promise.all(years.map(async yr => {
+    const dateStr = `${yr}-${mm}`;
+    const url = `https://archive-api.open-meteo.com/v1/archive`
+      + `?latitude=${cfg.lat}&longitude=${cfg.lon}`
+      + `&hourly=temperature_2m,weathercode`
+      + `&daily=weathercode,temperature_2m_max,temperature_2m_min`
+      + `&timezone=Asia%2FTokyo`
+      + `&start_date=${dateStr}&end_date=${dateStr}`;
+    try {
+      const res = await fetch(url);
+      const d   = await res.json();
+      if (!d.daily) return;
+
+      const times = d.hourly?.time ?? [];
+      const temps = d.hourly?.temperature_2m ?? [];
+      const slice = (hStart, hEnd) => {
+        let vals = [];
+        times.forEach((t,i) => {
+          const h = parseInt(t.slice(11,13));
+          if (h >= hStart && h <= hEnd) vals.push(temps[i]);
+        });
+        return vals.length ? vals.reduce((a,b)=>a+b,0)/vals.length : null;
+      };
+      const m = slice(6,9);
+      const dy = slice(12,15) ?? d.daily.temperature_2m_max[0];
+      const n  = slice(21,23) ?? d.daily.temperature_2m_min[0];
+      if (m  != null) mornings.push(m);
+      if (dy != null) days.push(dy);
+      if (n  != null) nights.push(n);
+      if (d.daily.weathercode?.[0] != null) wmos.push(d.daily.weathercode[0]);
+    } catch(e) {}
+  }));
+
+  const avg = arr => arr.length ? Math.round(arr.reduce((a,b)=>a+b,0)/arr.length) : '--';
+  // 取最常出現的 wmo
+  const wmo = wmos.length
+    ? wmos.sort((a,b)=>
+        wmos.filter(v=>v===b).length - wmos.filter(v=>v===a).length
+      )[0]
+    : 1; // 預設晴時多雲
+
+  return {
+    morningT: avg(mornings),
+    dayT:     avg(days),
+    nightT:   avg(nights),
+    wmo,
+    pop: 0,     // 歷史均值不提供降水機率
+    precip: 0,
+  };
+}
+
+// ── 主入口：判斷模式後渲染 ──
+async function loadWeather(cfg) {
+  const bar = document.getElementById(cfg.id);
+  if (!bar) return;
+
+  try {
+    let data, isClimatology;
+    if (isInForecastWindow(cfg.date)) {
+      data = await fetchForecast(cfg);
+      isClimatology = false;
+    } else {
+      data = await fetchClimatology(cfg);
+      isClimatology = true;
+    }
+    renderWeatherBar(bar, cfg, data, isClimatology);
+  } catch(e) {
+    bar.innerHTML = `<span class="wb-loading">天氣載入失敗，請稍後重試 🌸</span>`;
+    console.error(e);
+  }
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+  WEATHER_CFG.forEach(loadWeather);
+});
+
+// ── 頁籤切換 ──
+function showDay(n, btn) {
+  document.querySelectorAll('.day-section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('day' + n).classList.add('active');
+  btn.classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ── Checklist 狀態持久化 ──
+document.querySelectorAll('.cl-item input[type=checkbox]').forEach((cb, i) => {
+  try { cb.checked = localStorage.getItem('hk26_' + i) === '1'; } catch(e) {}
+  cb.addEventListener('change', () => {
+    try { localStorage.setItem('hk26_' + i, cb.checked ? '1' : '0'); } catch(e) {}
+  });
+});
+</script>
+</body>
+</html>
